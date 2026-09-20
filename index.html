@@ -1,603 +1,96 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Exam Portal & Question Paper Vault</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --accent-green: #10b981;
-            --accent-amber: #f59e0b;
-            --accent-red: #ef4444;
-        }
+  <title>My Platform Game</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #87ceeb;
+      font-family: Arial, sans-serif;
+    }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            min-height: 100vh;
-            padding: 20px;
-        }
+    canvas {
+      display: block;
+      margin: auto;
+      background: linear-gradient(#87ceeb 70%, #5fbd4f 70%);
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        header h1 {
-            color: #818cf8;
-            margin-bottom: 8px;
-            font-size: 1.8rem;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        /* Tabs */
-        .tab-navigation {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .tab-btn:hover:not(.active) {
-            background-color: var(--border-color);
-            color: var(--text-light);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Grid Layout */
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .grid-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Cards & Forms */
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-
-        .card h2 {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #a5b4fc;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px 12px;
-            background: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: white;
-            font-size: 0.95rem;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            width: 100%;
-            transition: background 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            background: var(--primary-hover);
-        }
-
-        /* Tables & Lists */
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th {
-            background-color: #0f172a;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-
-        .action-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .btn-delete {
-            color: var(--accent-red);
-        }
-
-        .btn-delete:hover {
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .btn-view {
-            color: var(--accent-green);
-        }
-
-        .btn-view:hover {
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        /* Question Paper Cards */
-        .qp-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-        }
-
-        .qp-card {
-            background: #0f172a;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .qp-card h3 {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            margin-bottom: 5px;
-        }
-
-        .qp-card p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
-
-        .qp-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .qp-actions button, .qp-actions a {
-            flex: 1;
-            text-align: center;
-            padding: 6px;
-            font-size: 0.8rem;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            background: #334155;
-            color: #cbd5e1;
-            margin-bottom: 8px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 800px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-        }
-
-        .empty-state i {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            opacity: 0.5;
-        }
-    </style>
+    #info {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px #000;
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="container">
-        <header>
-            <h1><i class="fa-solid fa-graduation-cap"></i> Student Portal & Question Paper Vault</h1>
-            <p>Exam Time Table & Previous Question Papers - Save Everything in One Place</p>
-        </header>
+<div id="info">Coins: <span id="score">0</span></div>
 
-        <!-- Navigation Tabs -->
-        <div class="tab-navigation">
-            <button class="tab-btn active" onclick="switchTab('timetable')">
-                <i class="fa-solid fa-calendar-days"></i> Exam Time Table
-            </button>
-            <button class="tab-btn" onclick="switchTab('questionpapers')">
-                <i class="fa-solid fa-file-pdf"></i> Question Papers Vault
-            </button>
-        </div>
+<canvas id="game" width="900" height="500"></canvas>
 
-        <!-- TAB 1: Time Table Manager -->
-        <div id="timetable-tab" class="tab-content active">
-            <div class="grid-layout">
-                <!-- Add Exam Form -->
-                <div class="card">
-                    <h2><i class="fa-solid fa-plus-circle"></i> Add Exam Schedule</h2>
-                    <form id="timetable-form">
-                        <div class="form-group">
-                            <label for="subject-name">Subject Name</label>
-                            <input type="text" id="subject-name" class="form-control" placeholder="e.g. Mathematics" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exam-date">Date</label>
-                            <input type="date" id="exam-date" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exam-time">Time</label>
-                            <input type="time" id="exam-time" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exam-notes">Notes / Syllabus</label>
-                            <input type="text" id="exam-notes" class="form-control" placeholder="e.g. Units 1 to 3">
-                        </div>
-                        <button type="submit" class="btn"><i class="fa-solid fa-save"></i> Save Exam</button>
-                    </form>
-                </div>
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-                <!-- Time Table Display -->
-                <div class="card">
-                    <h2><i class="fa-solid fa-list-check"></i> Upcoming Exams Schedule</h2>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Subject</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Syllabus</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="timetable-list">
-                                <!-- Dynamic Content -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+let score = 0;
+let gameOver = false;
 
-        <!-- TAB 2: Question Papers Storage -->
-        <div id="questionpapers-tab" class="tab-content">
-            <div class="grid-layout">
-                <!-- Add Question Paper Form -->
-                <div class="card">
-                    <h2><i class="fa-solid fa-cloud-arrow-up"></i> Save Question Paper</h2>
-                    <form id="qp-form">
-                        <div class="form-group">
-                            <label for="qp-school">School / College Name</label>
-                            <input type="text" id="qp-school" class="form-control" placeholder="e.g. GHSS High School" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="qp-subject">Subject</label>
-                            <input type="text" id="qp-subject" class="form-control" placeholder="e.g. Physics" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="qp-year">Year / Term</label>
-                            <input type="text" id="qp-year" class="form-control" placeholder="e.g. 2023 Half-Yearly" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="qp-file">Upload File (Image/PDF) or Paste Link</label>
-                            <input type="file" id="qp-file" class="form-control" accept="image/*,application/pdf" style="margin-bottom: 8px;">
-                            <input type="url" id="qp-link" class="form-control" placeholder="OR Paste Google Drive / Web Link">
-                        </div>
-                        <button type="submit" class="btn"><i class="fa-solid fa-upload"></i> Save Paper</button>
-                    </form>
-                </div>
+const player = {
+  x: 100,
+  y: 350,
+  width: 35,
+  height: 45,
+  vx: 0,
+  vy: 0,
+  speed: 5,
+  jump: -13,
+  grounded: false
+};
 
-                <!-- Saved Papers List -->
-                <div class="card">
-                    <h2><i class="fa-solid fa-folder-open"></i> Saved Question Papers</h2>
-                    <div class="qp-grid" id="qp-list">
-                        <!-- Dynamic Content -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+const keys = {};
 
-    <!-- Modal Viewer -->
-    <div id="view-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal()">&times;</button>
-            <div id="modal-body"></div>
-        </div>
-    </div>
+document.addEventListener("keydown", e => {
+  keys[e.key] = true;
 
-    <script>
-        // Tab Switcher
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            if (tabName === 'timetable') {
-                document.querySelectorAll('.tab-btn')[0].classList.add('active');
-                document.getElementById('timetable-tab').classList.add('active');
-            } else {
-                document.querySelectorAll('.tab-btn')[1].classList.add('active');
-                document.getElementById('questionpapers-tab').classList.add('active');
-            }
-        }
+  if (e.key === " " && player.grounded) {
+    player.vy = player.jump;
+    player.grounded = false;
+  }
+});
 
-        // Data Storage Handles
-        let exams = JSON.parse(localStorage.getItem('student_exams')) || [];
-        let papers = JSON.parse(localStorage.getItem('student_papers')) || [];
+document.addEventListener("keyup", e => {
+  keys[e.key] = false;
+});
 
-        // Save Timetable
-        document.getElementById('timetable-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const subject = document.getElementById('subject-name').value;
-            const date = document.getElementById('exam-date').value;
-            const time = document.getElementById('exam-time').value;
-            const notes = document.getElementById('exam-notes').value;
+const platforms = [
+  { x: 0, y: 450, width: 900, height: 50 },
+  { x: 250, y: 360, width: 150, height: 20 },
+  { x: 500, y: 300, width: 150, height: 20 },
+  { x: 720, y: 370, width: 120, height: 20 }
+];
 
-            const exam = { id: Date.now(), subject, date, time, notes };
-            exams.push(exam);
-            localStorage.setItem('student_exams', JSON.stringify(exams));
-            this.reset();
-            renderTimetable();
-        });
+const coins = [
+  { x: 300, y: 320, collected: false },
+  { x: 550, y: 260, collected: false },
+  { x: 760, y: 330, collected: false }
+];
 
-        // Render Timetable
-        function renderTimetable() {
-            const list = document.getElementById('timetable-list');
-            list.innerHTML = '';
-
-            if (exams.length === 0) {
-                list.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fa-solid fa-calendar-xmark"></i><br>No exams added yet!</td></tr>`;
-                return;
-            }
-
-            exams.sort((a,b) => new Date(a.date) - new Date(b.date));
-
-            exams.forEach(exam => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>${exam.subject}</strong></td>
-                    <td>${exam.date}</td>
-                    <td>${exam.time}</td>
-                    <td>${exam.notes || '-'}</td>
-                    <td>
-                        <button class="action-btn btn-delete" onclick="deleteExam(${exam.id})"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                list.appendChild(tr);
-            });
-        }
-
-        function deleteExam(id) {
-            exams = exams.filter(e => e.id !== id);
-            localStorage.setItem('student_exams', JSON.stringify(exams));
-            renderTimetable();
-        }
-
-        // Save Question Paper
-        document.getElementById('qp-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const school = document.getElementById('qp-school').value;
-            const subject = document.getElementById('qp-subject').value;
-            const year = document.getElementById('qp-year').value;
-            const fileInput = document.getElementById('qp-file');
-            const linkInput = document.getElementById('qp-link').value;
-
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    savePaperObject({ school, subject, year, data: e.target.result, type: file.type.includes('pdf') ? 'pdf' : 'image' });
-                };
-                reader.readAsDataURL(file);
-            } else if (linkInput) {
-                savePaperObject({ school, subject, year, data: linkInput, type: 'link' });
-            } else {
-                alert('Please upload a file or enter a link!');
-            }
-        });
-
-        function savePaperObject(paperObj) {
-            paperObj.id = Date.now();
-            papers.push(paperObj);
-            localStorage.setItem('student_papers', JSON.stringify(papers));
-            document.getElementById('qp-form').reset();
-            renderPapers();
-        }
-
-        // Render Question Papers
-        function renderPapers() {
-            const grid = document.getElementById('qp-list');
-            grid.innerHTML = '';
-
-            if (papers.length === 0) {
-                grid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><i class="fa-solid fa-folder-open"></i><br>No question papers uploaded yet!</div>`;
-                return;
-            }
-
-            papers.forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'qp-card';
-                card.innerHTML = `
-                    <div>
-                        <span class="badge">${p.school}</span>
-                        <h3>${p.subject}</h3>
-                        <p>${p.year}</p>
-                    </div>
-                    <div class="qp-actions">
-                        <button class="btn btn-view" onclick="viewPaper(${p.id})"><i class="fa-solid fa-eye"></i> View</button>
-                        <button class="btn btn-delete" style="width: auto;" onclick="deletePaper(${p.id})"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function viewPaper(id) {
-            const paper = papers.find(p => p.id === id);
-            const modalBody = document.getElementById('modal-body');
-            
-            if (paper.type === 'image') {
-                modalBody.innerHTML = `<img src="${paper.data}" style="width:100%; border-radius:8px;">`;
-            } else if (paper.type === 'pdf') {
-                modalBody.innerHTML = `<embed src="${paper.data}" type="application/pdf" width="100%" height="500px" />`;
-            } else {
-                window.open(paper.data, '_blank');
-                return;
-            }
-            document.getElementById('view-modal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('view-modal').style.display = 'none';
-        }
-
-        function deletePaper(id) {
-            papers = papers.filter(p => p.id !== id);
-            localStorage.setItem('student_papers', JSON.stringify(papers));
-            renderPapers();
-        }
-
-        // Initial Load
-        renderTimetable();
-        renderPapers();
-    </script>
-</body>
-</html>
+const enemies = [
+  {
+    x: 600,
+    y: 410,
+    width: 35,
+    height: 35,
+    vx: 2
+  }
+];
